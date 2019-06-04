@@ -42,24 +42,34 @@ public:
 		static AFSGameMode* FSGetGameMode(UObject* WorldContextObject);
 
 	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
-	static void LeftMouseButtonDown();
+	static void LeftMouseButtonPressed();
 	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
-	static void LeftMouseButtonUp();
+	static void LeftMouseButtonReleased();
 	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
-	static void UpButtonDown();
+	static void UpButtonPressed();
 	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
-	static void UpButtonUp();
+	static void UpButtonReleased();
 	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
-	static void DownButtonDown();
+	static void DownButtonPressed();
 	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
-	static void DownButtonUp();
+	static void DownButtonReleased();
 	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
-	static void LeftButtonDown();
+	static void LeftButtonPressed();
 	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
-	static void LeftButtonUp();
+	static void LeftButtonReleased();
 	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
-	static void RightButtonDown();
+	static void RightButtonPressed();
 	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
-	static void RightButtonUp();
+	static void RightButtonReleased();
+	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
+	static void EnterButtonPressed();
+	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
+	static void EnterButtonReleased();
+	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
+	static void ButtonPressed(int keycode);
+	UFUNCTION(BlueprintCallable, Category = "Flight|UI")
+	static void ButtonReleased(int keycode);
+
+
 	
 };

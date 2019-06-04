@@ -37,7 +37,7 @@ AFSGameMode * UFS_Core_BPL::FSGetGameMode(UObject * WorldContextObject)
  }
 
 
- void UFS_Core_BPL::LeftMouseButtonDown()
+ void UFS_Core_BPL::LeftMouseButtonPressed()
 {
     INPUT Input = { 0 };
     Input.type = INPUT_MOUSE;
@@ -48,7 +48,7 @@ AFSGameMode * UFS_Core_BPL::FSGetGameMode(UObject * WorldContextObject)
 
 }
 
-void UFS_Core_BPL::LeftMouseButtonUp()
+void UFS_Core_BPL::LeftMouseButtonReleased()
 {
     INPUT Input = { 0 };
     Input.type = INPUT_MOUSE;
@@ -57,77 +57,71 @@ void UFS_Core_BPL::LeftMouseButtonUp()
     Input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
     SendInput(1, &Input, sizeof(INPUT));
 }
-void UFS_Core_BPL::UpButtonDown()
+void UFS_Core_BPL::UpButtonPressed()
 {
-    INPUT Input = { 0 };
-    Input.type       = INPUT_KEYBOARD;
-    Input.mi.dwFlags = KEYEVENTF_EXTENDEDKEY;
-    Input.ki.wVk   = VK_UP; 
-    SendInput( 1, &Input, sizeof( INPUT ) );
+    keybd_event(VK_UP, 0, 0, 0);   
 
 }
 
-void UFS_Core_BPL::UpButtonUp()
+void UFS_Core_BPL::UpButtonReleased()
 {
-     INPUT Input = { 0 };
-    Input.type       = INPUT_KEYBOARD;
-    Input.mi.dwFlags = KEYEVENTF_KEYUP;
-    Input.ki.wVk   = VK_UP; 
-    SendInput( 1, &Input, sizeof( INPUT ) );
+    keybd_event(VK_UP, 0, KEYEVENTF_KEYUP, 0);   
+
 }
-void UFS_Core_BPL::DownButtonDown()
+void UFS_Core_BPL::DownButtonPressed()
 {
-    INPUT Input = { 0 };
-    Input.type       = INPUT_KEYBOARD;
-    Input.mi.dwFlags = KEYEVENTF_EXTENDEDKEY;
-    Input.ki.wVk   = VK_DOWN; 
-    SendInput( 1, &Input, sizeof( INPUT ) );
+    keybd_event(VK_DOWN, 0, 0, 0);   
 
 }
 
-void UFS_Core_BPL::DownButtonUp()
+void UFS_Core_BPL::DownButtonReleased()
 {
-     INPUT Input = { 0 };
-    Input.type       = INPUT_KEYBOARD;
-    Input.mi.dwFlags = KEYEVENTF_KEYUP;
-    Input.ki.wVk   = VK_DOWN; 
-    SendInput( 1, &Input, sizeof( INPUT ) );
+    keybd_event(VK_DOWN, 0, KEYEVENTF_KEYUP, 0);   
 }
-void UFS_Core_BPL::LeftButtonDown()
+void UFS_Core_BPL::LeftButtonPressed()
 {
-    INPUT Input = { 0 };
-    Input.type       = INPUT_KEYBOARD;
-    Input.mi.dwFlags = KEYEVENTF_EXTENDEDKEY;
-    Input.ki.wVk   = VK_LEFT; 
-    SendInput( 1, &Input, sizeof( INPUT ) );
+    keybd_event(VK_LEFT, 0, 0, 0);   
 
 }
 
-void UFS_Core_BPL::LeftButtonUp()
+void UFS_Core_BPL::LeftButtonReleased()
 {
-     INPUT Input = { 0 };
-    Input.type       = INPUT_KEYBOARD;
-    Input.mi.dwFlags = KEYEVENTF_KEYUP;
-    Input.ki.wVk   = VK_LEFT; 
-    SendInput( 1, &Input, sizeof( INPUT ) );
+    keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);   
 }
-void UFS_Core_BPL::RightButtonDown()
+void UFS_Core_BPL::RightButtonPressed()
 {
-    INPUT Input = { 0 };
-    Input.type       = INPUT_KEYBOARD;
-    Input.mi.dwFlags = KEYEVENTF_EXTENDEDKEY;
-    Input.ki.wVk   = VK_RIGHT; 
-    SendInput( 1, &Input, sizeof( INPUT ) );
+    keybd_event(VK_RIGHT, 0, 0, 0);   
 
 }
 
-void UFS_Core_BPL::RightButtonUp()
+void UFS_Core_BPL::RightButtonReleased()
 {
-     INPUT Input = { 0 };
-    Input.type       = INPUT_KEYBOARD;
-    Input.mi.dwFlags = KEYEVENTF_KEYUP;
-    Input.ki.wVk   = VK_RIGHT; 
-    SendInput( 1, &Input, sizeof( INPUT ) );
+    keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);   
+
+}
+
+void UFS_Core_BPL::EnterButtonPressed()
+{
+    keybd_event(VK_RETURN, 0, 0, 0); 
+
+
+}
+
+void UFS_Core_BPL::EnterButtonReleased()
+{
+    keybd_event(VK_RETURN, 0, KEYEVENTF_KEYUP, 0);   
+
+}
+
+void UFS_Core_BPL::ButtonPressed(int keycode)
+{
+   keybd_event(keycode, 0, 0, 0); 
+
+}
+void UFS_Core_BPL::ButtonReleased(int keycode)
+{
+   keybd_event(keycode, 0, KEYEVENTF_KEYUP, 0);   
+
 }
 
 
