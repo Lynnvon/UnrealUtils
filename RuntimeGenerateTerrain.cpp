@@ -22,6 +22,7 @@
 #include "LandscapeHeightfieldCollisionComponent.h"
 #include "UnrealMathUtility.h"
 #include "Async.h"
+#include "FS_ImageLoader.h"
 
 
  // Sets default values for this component's properties
@@ -38,15 +39,14 @@ URuntimeGenerateTerrain::URuntimeGenerateTerrain()
 		SounceMaterial = _material.Object;
 	}
 
-
 }
-
 
 // Called when the game starts
 void URuntimeGenerateTerrain::BeginPlay()
 {
 	Super::BeginPlay();
 
+	
 	// ...
 	UWorld* world = GetWorld();
 	check(world);
@@ -66,6 +66,8 @@ void URuntimeGenerateTerrain::BeginPlay()
 			SetXYtoComponentMap(C);
 		}
 	}
+
+	
 }
 
 // Called every frame
@@ -74,6 +76,7 @@ void URuntimeGenerateTerrain::TickComponent(float DeltaTime, ELevelTick TickType
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...	
+	/*
 	if (!mLandscape)return;
 	CalComponentIndex();
 	if (bAddComponent)
@@ -82,7 +85,7 @@ void URuntimeGenerateTerrain::TickComponent(float DeltaTime, ELevelTick TickType
 		RemoveLandscapeComponent();
 		MoveLandscapeComponent();
 
-	}
+	}*/
 }
 
 bool URuntimeGenerateTerrain::LoadTexture(ULandscapeComponent* C)
@@ -103,7 +106,6 @@ bool URuntimeGenerateTerrain::LoadTexture(ULandscapeComponent* C)
 		_fileName.Append(FString::FromInt(YIndex + columnOffset));
 		_fileName.Append(FString("'"));
 
-
 		UTexture2D* texture = LoadObject<UTexture2D>(NULL, *_fileName);
 		if (texture)
 		{
@@ -121,13 +123,15 @@ bool URuntimeGenerateTerrain::LoadTexture(ULandscapeComponent* C)
 bool URuntimeGenerateTerrain::AsyncLoadTexture(ULandscapeComponent* C)
 {
 	
+	ReadyForTextureMID.Add(C);
+	
 	for (int i = 0; i < C->MaterialInstancesDynamic.Num(); i++)
 	{
 		UMaterialInstanceDynamic* MID = C->MaterialInstancesDynamic[i];
 		int XIndex = GetComponentIndexX(C);
 		int YIndex = GetComponentIndexY(C);
-
-		FString _fileName = FString("Texture2D'/Game/GoogleMap/satellite_en/Terrain_1/18/");
+		FIntPoint ComponentIndex = FIntPoint(XIndex,YIndex);
+		FString _fileName = FString("H:/MapDownload/FlightMap/googlemaps/Terrain_1/18/");
 		int rowOffset = FCString::Atoi(*UFS_Utils::GetTerrainConfigSection(FString("rowOffset")));
 		int columnOffset = FCString::Atoi(*UFS_Utils::GetTerrainConfigSection(FString("columnOffset")));
 		_fileName.Append(FString::FromInt(XIndex + rowOffset));
@@ -136,15 +140,22 @@ bool URuntimeGenerateTerrain::AsyncLoadTexture(ULandscapeComponent* C)
 		_fileName.Append(FString("."));
 		_fileName.Append(FString::FromInt(YIndex + columnOffset));
 		_fileName.Append(FString("'"));
-
-
+		_fileName = FString("C:/MapDownload/test/12.jpg");
 		
+
+		UFS_ImageLoader* loader = UFS_ImageLoader::LoadImageFromDiskAsync(this,_fileName);
+		if (loader)
+		{
+			loader->OnLoadCompleted().AddDynamic(this,&URuntimeGenerateTerrain::LoadTextureComplete);
+		}	
 	}
 	return true;
 }
 
 void URuntimeGenerateTerrain::MoveLandscapeComponent()
 {
+	ReadyForTextureMID.Empty();
+	
 	for (int32 ComponentIndexY = ComponentIndexY1; ComponentIndexY <= ComponentIndexY2; ComponentIndexY++)
 	{
 		for (int32 ComponentIndexX = ComponentIndexX1; ComponentIndexX <= ComponentIndexX2; ComponentIndexX++)
@@ -162,12 +173,15 @@ void URuntimeGenerateTerrain::MoveLandscapeComponent()
 					LandscapeComponent->SetRelativeLocation(FVector(ComponentBase.X, ComponentBase.Y, 0));
 					LandscapeComponent->SetMobility(EComponentMobility::Static);
 					SetXYtoComponentMap(LandscapeComponent);
+					
 					LoadTexture(LandscapeComponent);
+				
 					DeleteComponents.RemoveSingleSwap(LandscapeComponent);
 				}
 			}
 		}
 	}
+
 	UpdateLeftAndRightPoint();
 
 	UE_LOG(LogTemp, Warning, TEXT("LeftBottom = %s,RightTop = %s"), *LeftBottom.ToString(), *RightTop.ToString());
@@ -395,5 +409,19 @@ int URuntimeGenerateTerrain::GetComponentIndexY(ULandscapeComponent* C)
 	return C->GetRelativeTransform().GetLocation().Y / mLandscape->ComponentSizeQuads;
 }
 
+void URuntimeGenerateTerrain::LoadTextureComplete(UTexture2D* texture)
+{
+
+	if(!texture)return;
+
+	//GEngine->AddOnScreenDebugMessage(-1,3,FColor::Red,texture->GetName());
+	//if (ReadyForTextureMID.Num()>0)
+	//{
+	//	ULandscapeComponent* c = ReadyForTextureMID.Top();
+	//	UMaterialInstanceDynamic* mid = c->MaterialInstancesDynamic.Top();
+	//	mid->SetTextureParameterValue(FName("Texture"),texture);
+	//	ReadyForTextureMID.RemoveSingleSwap(c);
+	//}
+}
 
 

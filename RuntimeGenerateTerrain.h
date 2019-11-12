@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "FS_ImageLoader.h"
 
 #include "RuntimeGenerateTerrain.generated.h"
 
@@ -31,6 +32,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+
+
 	void InitLandscapeComponent();
 
 	bool LoadTexture(ULandscapeComponent* C);
@@ -53,6 +56,8 @@ public:
 
 	int GetComponentIndexX(ULandscapeComponent* C);
 	int GetComponentIndexY(ULandscapeComponent* C);
+	UFUNCTION()
+	void LoadTextureComplete(UTexture2D* texture);
 
 
 
@@ -74,6 +79,11 @@ private:
 	FVector2D RightTop = FVector2D(LANDSCAPESIZE,LANDSCAPESIZE);
 
 	TArray<ULandscapeComponent*> DeleteComponents;
+	TArray<ULandscapeComponent*> ReadyForTextureMID;
+
+	
+
+
 
 
 };
