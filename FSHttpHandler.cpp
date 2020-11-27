@@ -44,7 +44,7 @@ AFSHttpHandler::AFSHttpHandler()
 	PrimaryActorTick.bCanEverTick = false;
 	IsRegistry = false;
 	Result = "";
-	Key = "ShinBan820710";
+	Key = "123456789";
 	category = "001";
 	_id = "";
 	SavePath = FPlatformProcess::UserSettingsDir();
